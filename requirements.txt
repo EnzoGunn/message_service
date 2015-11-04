@@ -1,0 +1,6 @@
+flask
+flask-api
+jsonpickle
+requests
+status
+nose

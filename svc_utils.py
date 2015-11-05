@@ -59,3 +59,14 @@ class SvcUtils(object):
         if version_match:
             return version_match.group(1)
         raise RuntimeError("Unable to find version string.")
+
+    @staticmethod
+    def regex_validate(regex, msg):
+        return re.match(regex, msg)
+
+    @staticmethod
+    def validate_username(username):
+        is_valid = True
+        if SvcConfig.username_validation_regex is not None:
+            is_valid = SvcUtils.regex_validate(SvcConfig.username_validation_regex, username)
+        return is_valid

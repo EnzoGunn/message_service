@@ -1,4 +1,6 @@
 {
   "apiVersion": 1.0,
-  "isDebugMode": true
+  "isDebugMode": true,
+  "dbConnectionStr": "driver={SQL Server};server=SERVER_NAME;database=chat;uid=ChatMessageLogin;pwd=PASSWORD;",
+  "dbConnectionStr_linux": "DSN=SERVER_NAME;DATABASE=chat;UID=ChatMessageLogin;PWD=PASSWORD;"
 }

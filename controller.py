@@ -9,7 +9,6 @@ from svc_error import SvcError
 from svc_utils import SvcUtils
 
 app = Flask(__name__)
-logger = SvcUtils.get_logger(__name__)
 
 
 @app.route('/v{0:.1f}/admin/status'.format(SvcConfig.api_version), methods=['GET', 'OPTIONS'])

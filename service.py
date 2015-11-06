@@ -21,7 +21,7 @@ class Service(object):
 
     def save_message(self, request):
         if request is None or request == '':
-            raise SvcException('invalid event request, no valid request was submitted')
+            raise SvcException('invalid message request, no valid request was submitted')
         request_dict = SvcUtils.deserialize_object(request)
 
         try:

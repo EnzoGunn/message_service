@@ -1,15 +1,15 @@
 #! /usr/bin/env python
 
-import jsonpickle
-import logging
-import io
-import os
-import time
-import re
-from datetime import datetime
+from flask import make_response
 from logging.handlers import TimedRotatingFileHandler
 from svc_config import SvcConfig
 from svc_constants import SvcConstants
+import io
+import jsonpickle
+import logging
+import os
+import re
+import time
 
 
 class SvcUtils(object):
@@ -29,15 +29,15 @@ class SvcUtils(object):
         logging.basicConfig(format=SvcConfig.log_message_format, level=log_level, datefmt=SvcConstants.DATETIME_FORMAT)
         logger = logging.getLogger(class_name)
 
-        if not SvcConfig.is_debug_mode:
-            if not os.path.exists(SvcConstants.LOG_FILE_FOLDER):
-                os.makedirs(SvcConstants.LOG_FILE_FOLDER)
-            handler = TimedRotatingFileHandler(filename=SvcConstants.LOG_FILE_PATH, when='midnight', utc=True)
-            handler.suffix = '%Y-%m-%d.log'
-            handler.mode = 'a'
-            handler_formatter = logging.Formatter(fmt=SvcConfig.logMessageFormat, datefmt=SvcConstants.DATETIME_FORMAT)
-            handler.setFormatter(handler_formatter)
-            logger.addHandler(handler)
+        if not os.path.exists(SvcConstants.LOG_FILE_FOLDER):
+            os.makedirs(SvcConstants.LOG_FILE_FOLDER)
+
+        handler = TimedRotatingFileHandler(filename=SvcConstants.LOG_FILE_PATH, when='midnight', utc=True)
+        handler.suffix = '%Y-%m-%d.log'
+        handler.mode = 'a'
+        handler_formatter = logging.Formatter(fmt=SvcConfig.log_message_format, datefmt=SvcConstants.DATETIME_FORMAT)
+        handler.setFormatter(handler_formatter)
+        logger.addHandler(handler)
 
         return logger
 
@@ -56,6 +56,7 @@ class SvcUtils(object):
     def get_build_version():
         version_file = SvcUtils.read('__init__.py')
         version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+
         if version_match:
             return version_match.group(1)
         raise RuntimeError("Unable to find version string.")
@@ -67,6 +68,20 @@ class SvcUtils(object):
     @staticmethod
     def validate_username(username):
         is_valid = True
+
         if SvcConfig.username_validation_regex is not None:
             is_valid = SvcUtils.regex_validate(SvcConfig.username_validation_regex, username)
+
         return is_valid
+
+    @staticmethod
+    def handle_response(response_obj, http_status):
+        response_json = SvcUtils.serialize_object(response_obj)
+        svc_response = make_response(response_json)
+        svc_response.mimetype = 'application/json'
+        svc_response.status_code = http_status
+        return svc_response
+
+    @staticmethod
+    def get_obj_from_dict(obj_dict, class_name):
+        return type(class_name, (object,), obj_dict)

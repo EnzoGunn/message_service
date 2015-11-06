@@ -7,6 +7,7 @@ class SvcConstants(object):
     # configuration keys
     API_VERSION_KEY = 'apiVersion'
     LOG_MESSAGE_FORMAT_KEY = 'logMessageFormat'
+    DB_CONNECTION_STRING_KEY = 'dbConnectionStr'
     IS_DEBUG_MODE_KEY = 'isDebugMode'
     INCLUDE_JSON_METADATA_KEY = 'includeJsonMetadata'
     HTTP_PORT_NUMBER_KEY = 'httpPortNumber'

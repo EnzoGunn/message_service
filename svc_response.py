@@ -8,10 +8,15 @@ class PingDto(object):
         self.is_debug_mode = is_debug_mode
 
 
+class MessageId(object):
+    def __init__(self, message_id):
+        self.id = message_id
+
+
 class MessageDto(object):
-    def __init__(self, id, text):
+    def __init__(self, message_id, text):
         # message ID
-        self.id = id
+        self.id = message_id
         # message content
         self.text = text
 
